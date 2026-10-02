@@ -1,2 +1,2 @@
 # AssetLiquidation
-A lightweight Asset Liquidation &amp; Settlement API built with .NET 8, demonstrating asynchronous event processing, message queues, and domain-driven balance management.
+AssetLiquidation is a sample backend application designed to simulate financial asset liquidation. It manages asset balances by processing payment and reversal events asynchronously via RabbitMQ messaging.
