@@ -1,0 +1,13 @@
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/bin/Debug/net10.0/AssetLiquidation.Core.deps.json
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/bin/Debug/net10.0/AssetLiquidation.Core.dll
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/bin/Debug/net10.0/AssetLiquidation.Core.pdb
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/AssetLiquidation.Core.csproj.AssemblyReference.cache
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/AssetLiquidation.Core.GeneratedMSBuildEditorConfig.editorconfig
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/AssetLiquidation.Core.AssemblyInfoInputs.cache
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/AssetLiquidation.Core.AssemblyInfo.cs
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/AssetLiquidation.Core.csproj.CoreCompileInputs.cache
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/AssetLiquidation.Core.sourcelink.json
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/AssetLiquidation.Core.dll
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/refint/AssetLiquidation.Core.dll
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/AssetLiquidation.Core.pdb
+/home/codespace/AssetLiquidation/src/AssetLiquidation.Core/obj/Debug/net10.0/ref/AssetLiquidation.Core.dll

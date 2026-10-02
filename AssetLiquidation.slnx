@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AssetLiquidation.Api/AssetLiquidation.Api.csproj" />
+    <Project Path="src/AssetLiquidation.Core/AssetLiquidation.Core.csproj" />
+    <Project Path="src/AssetLiquidation.Worker/AssetLiquidation.Worker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AssetLiquidation.Tests/AssetLiquidation.Tests.csproj" />
+  </Folder>
+</Solution>

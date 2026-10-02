@@ -1,0 +1,6 @@
+@AssetLiquidation.Api_HostAddress = http://localhost:5094
+
+GET {{AssetLiquidation.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
