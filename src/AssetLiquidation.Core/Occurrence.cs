@@ -8,7 +8,7 @@ public class Occurrence
     public decimal Amount { get; private set; }
     public ProcessingStatus Status { get; private set; }
     public DateTime CreatedAt { get; private set; }
-    public string? Reason { get; private set; };
+    public string? Reason { get; private set; }
 
     protected Occurrence() {}
 
