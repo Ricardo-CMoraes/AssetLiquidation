@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 namespace AssetLiquidation.Core;
 
 public class Asset
@@ -13,6 +15,8 @@ public class Asset
 
     public Asset(string assetId, decimal initialAmount)
     {
+        if (string.IsNullOrWhiteSpace(assetId) || !Regex.IsMatch(assetId, @"^\d{11}$"))
+            throw new ArgumentException("AssetId must contain exactly 11 numeric digits.", nameof(assetId));
         if (initialAmount <= 0)
             throw new ArgumentException("Initial amount must be greater than zero.", nameof(initialAmount));
 

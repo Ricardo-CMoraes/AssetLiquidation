@@ -24,6 +24,9 @@ public class AssetController : ControllerBase
     {
         try
         {
+            var exists = await _context.Assets.AnyAsync(a => a.AssetId == request.AssetId);
+            if (exists)
+                return Conflict (new { message = $"Alredy exist an AssetId '{request.AssetId}'." });
             var asset = new Asset(request.AssetId, request.InitialAmount);
             //estudar
             _context.Assets.Add(asset);
@@ -55,7 +58,32 @@ public class AssetController : ControllerBase
         var asset = await _context.Assets.FindAsync(id);
 
         if (asset == null)
-            return NotFound(new { message = "Ativo não encontrado." });
+            return NotFound(new { message = "Asset not found." });
+
+        var response = new AssetResponse(
+            asset.Id,
+            asset.AssetId,
+            asset.InitialAmount,
+            asset.CurrentAmount,
+            asset.Status.ToString(),
+            asset.CreatedAt
+        );
+
+        return Ok(response);
+    }
+
+    /// <summary>
+    /// Consulta um Ativo pelo AssetId
+    /// </summary>
+    [HttpGet("contract/{assetId}")]
+    public async Task<IActionResult> GetByAssetId(string assetId)
+    {
+        var asset = await _context.Assets
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.AssetId == assetId);
+
+        if (asset == null)
+            return NotFound(new { message = $"Asset {assetId} not found." });
 
         var response = new AssetResponse(
             asset.Id,
