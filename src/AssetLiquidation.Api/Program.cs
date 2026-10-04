@@ -8,9 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 // 1. Adicionar suporte a Controllers REST
 builder.Services.AddControllers();
+
+//conection
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 // 2. Configurar o DbContext com Banco de Dados Em Memória
 builder.Services.AddDbContext<LiquidateDbContext>(options =>
-    options.UseInMemoryDatabase("AssetLiquidationDb"));
+    options.UseNpgsql(connectionString));
 
 // 3. Documentação Swagger/OpenAPI (nativo do .NET)
 builder.Services.AddEndpointsApiExplorer();

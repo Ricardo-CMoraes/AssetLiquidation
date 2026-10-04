@@ -55,3 +55,6 @@ DbContext mapeando tabelas.
 DTOs definindo os contratos de entrada e saída.
 Controllers injetando o DbContext, usando LINQ (AnyAsync, FirstOrDefaultAsync) para consultar/salvar e retornando IActionResult.
 Ninguém memoriza a documentação inteira. Desenvolvedores sêniores consultam referências o tempo todo; a diferença é que eles sabem o que procurar porque dominam o papel arquitetural de cada peça.
+
+
+Com certeza estudar o Entity Framework Core.
