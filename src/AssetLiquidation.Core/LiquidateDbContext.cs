@@ -8,7 +8,7 @@ public class LiquidateDbContext : DbContext
     : base(options) {}
 
     public DbSet<Asset> Assets => Set<Asset>();
-    public DbSet<Occurrence> Occurrences =>Set<Occurrence>();
+    public DbSet<Occurrence> Occurrences => Set<Occurrence>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

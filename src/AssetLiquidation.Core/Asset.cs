@@ -57,4 +57,14 @@ public class Asset
             this.Status = AssetStatus.Active;
         }
     }
+
+    public void ProcessCancellation()
+    {
+        if (this.Status == AssetStatus.Canceled)
+            throw new InvalidOperationException("Cannot process a canceled asset.");
+        else
+        {
+            this.Status = AssetStatus.Canceled;
+        }
+    }
 }

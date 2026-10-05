@@ -58,3 +58,21 @@ Ninguém memoriza a documentação inteira. Desenvolvedores sêniores consultam 
 
 
 Com certeza estudar o Entity Framework Core.
+
+
+
+
+Resumo dos Pontos-Chave para a Recapitulação (e para o Readme)
+Camada de Aplicação (AssetLiquidation.Api):
+Controllers: Tratam requisições HTTP RESTful, aplicam DTOs e injetam o DbContext.
+Swagger / OpenAPI: Interface interativa para consumo dos endpoints.
+
+Camada Core / Domínio (AssetLiquidation.Core):
+Entidade Asset: Contém validações de domínio (ex: Regex de 11 dígitos para o AssetId preservando zeros à esquerda).
+LiquidateDbContext: Mapeamento Objeto-Relacional via EF Core.
+Migrations: Versionamento Code-First da estrutura do banco.
+
+Infraestrutura Isolada (Docker & PostgreSQL):
+docker-compose.yml: Sobe o PostgreSQL 16 Alpine na porta 5432.
+Mapeamento de Portas (5432:5432): O Docker escuta na porta 5432 do Mac e redireciona para a 5432 interna do contêiner.
+Volume Persistente (postgres_data): Garante que os dados gravados continuem salvos no disco do Mac mesmo desligando o contêiner.
