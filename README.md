@@ -1,78 +1,111 @@
-# AssetLiquidation
-AssetLiquidation is a sample backend application designed to simulate financial asset liquidation. It manages asset balances by processing payment and reversal events asynchronously via RabbitMQ messaging.
+# Asset Liquidation System
+
+## Description
+The **Asset Liquidation System** is a backend application designed to simulate financial asset liquidation and track contract ledger occurrences. It manages asset balances and maintains a chronologically sorted audit trail of financial events (such as payments and refunds).
+
+## Instructions
+
+### Prerequisites
+* **.NET 8 SDK**
+* **Docker Desktop** (with Docker Compose enabled)
+
+### Setup & Execution
+
+1. **Spin up Infrastructure (PostgreSQL)**
+   ```bash
+   docker-compose up -d
+   ```
+2. Apply Database Migrations (if not auto-applied on startup)
+    ```bash
+    dotnet ef database update --project src/AssetLiquidation.Core/AssetLiquidation.Core.csproj --startup-project src/AssetLiquidation.Api/AssetLiquidation.Api.csproj
+    ```
+3. **Run Application**
+   ```bash
+    dotnet run --project src/AssetLiquidation.Api/AssetLiquidation.Api.csproj
+    ```
+4. **Access API Documentation**
+    Open http://localhost:5000/swagger (or the configured local port) in your browser.
+
+### API Endpoints
+
+#### AssetController
+* POST /api/asset — Create a new contract with initial balance.
+* GET /api/asset/{assetId} — Fetch asset status and current balance by contract ID.
+#### OccurrenceController
+* POST /api/occurrence — Process a new financial occurrence (1: Payment, 2: Refund).
+* GET /api/occurrence/{assetId} — Retrieve the full chronologically sorted audit ledger for a contract.
+
+---
+
+### Example Payloads & Usage
+
+1. Create an Asset (`POST /api/asset`)
+
+    ```json
+    {
+        "assetId": "20261004001",
+        "initialAmount": 150000.00
+    }
+
+2. Process a Payment (POST /api/occurrence)
+
+    ```json
+    {
+        "assetContractId": "20261004001",
+        "type": 1,
+        "amount": 34067.98
+    }
+    //Note on type: 1 = Payment, 2 = Refund
+
+3. Fetch Contract Audit Ledger (GET /api/occurrence/20261004001)
+
+    ```json
+    [
+        {
+            "id": "61e55752-299a-4634-9bb3-1fbd5f1ca52a",
+            "assetId": "20261004001",
+            "type": 2,
+            "amount": 500.98,
+            "status": 2,
+            "createdAt": "2026-10-05T00:48:28.549412Z",
+            "reason": null
+        },
+        {
+            "id": "238b0b9c-7760-4b93-bf44-5aa99248d761",
+            "assetId": "20261004001",
+            "type": 1,
+            "amount": 34067.98,
+            "status": 2,
+            "createdAt": "2026-10-05T00:48:12.390102Z",
+            "reason": null
+        }
+    ]
+## Architecture
+
+#### Following Clean Architecture principles and clear separation of responsibilities, the solution is structured as follows:
+* AssetLiquidation.slnx: Solution container.
+* AssetLiquidation.Core (Domain & Data Layer): Pure business logic, Rich Domain Entities (Asset, Occurrence), Enums, and LiquidateDbContext mappings.
+* AssetLiquidation.Api (Presentation Layer): RESTful Controllers, Request DTOs, Swagger documentation, and Dependency Injection setup.
+* Isolated Infrastructure (Docker & PostgreSQL 16):
+    * docker-compose.yml: Configures PostgreSQL 16 Alpine container listening on port 5432.
+    * Persistent Volume (postgres_data): Ensures data durability across container restart
+
+## Solution Structure (Project Overview)
+    AssetLiquidation/
+    ├── src/
+    │   ├── AssetLiquidation.Core/      # Domain Entities, Enums, DbContext & Migrations
+    │   └── AssetLiquidation.Api/       # Controllers, DTOs & Swagger Configuration
+    ├── docker-compose.yml              # PostgreSQL Service & Volume Definition
+    └── AssetLiquidation.slnx           # Solution File
 
 
-# Architecture
-Following Clean Architecture principles and the separation of responsibilities, the project will be structured as follows:
+## Next Steps
+* Implement RabbitMQ for asynchronous event ingestion and scalability.
+* Create a Dashboard to report real-time status and metrics of Assets.
+* Add unit and integration test coverage (xUnit / FluentAssertions).
 
-* Solution (.sln): Project container.
-* Core / Domain (Class Library): Contains the entities (Asset, Occurrence), interfaces, and pure business rules in C#.
-* API (Web API): Controllers, REST routes, Swagger, and dependency injection.
-* Worker / Infrastructure (Worker Service): Background service responsible for consuming RabbitMQ messages and processing asset liquidation.
-* Tests (xUnit): Unit test project.
-
-
-# Architecture - code
-2. O que vamos codificar nesta Branch
-Nesta branch feature/setup-arquitetura, a meta é colocar a estrutura de código C# pronta para compilar. Vamos criar os seguintes arquivos na biblioteca LiquidaAtivos.Core:
-
-* Enums.cs: Definição dos tipos (TipoOcorrencia, StatusAtivo, StatusProcessamento).
-* Ativo.cs: Entidade do Ativo com propriedades e validações de saldo.
-* Ocorrencia.cs: Entidade de Pagamento/Estorno.
-* LiquidaDbContext.cs: Contexto do Entity Framework Core.
-
-
-
-
-
-Para acelerar e consolidar esse aprendizado, existem 3 pilares práticos:
-
-Pilar 1: Agrupar por "Caixas de Responsabilidade" (Apenas 4 caixas!)
-Em vez de tentar memorizar centenas de métodos isolados (AnyAsync, AsNoTracking, CreatedAtAction, AddDbContext), agrupe-os pelo papel funcional que desempenham:
-Caixa HTTP / Web API (ASP.NET Core):
-O que faz: Trata a entrada e a saída de requisições web.
-Membros: ControllerBase, [HttpPost], [HttpGet], IActionResult, Ok(), Conflict(), CreatedAtAction().
-Caixa ORM / Acesso a Dados (Entity Framework Core):
-O que faz: Conversa com o banco de dados.
-Membros: DbContext, DbSet<T>, SaveChangesAsync(), AsNoTracking().
-Caixa de Consultas (LINQ - Language Integrated Query):
-O que faz: Filtra, mapeia e transforma coleções e tabelas.
-Membros: AnyAsync(), FirstOrDefaultAsync(), Where(), Select(), ToListAsync().
-Caixa de Arquitetura (Injeção de Dependência & Construtores):
-O que faz: Conecta as ferramentas na inicialização (Program.cs) para que fiquem disponíveis nos construtores das classes.
-
-Pilar 2: Entender o Padrão de Nomenclatura do C#
-O C# é extremamente consistente. Quando você entende as convenções da Microsoft, consegue adivinhar o que um método faz mesmo sem nunca tê-lo visto antes:
-Sufixo Async: O método retorna uma Task e deve ser chamado usando await.
-Prefixo Get / Find / First: Métodos para buscar dados.
-Prefixo Any / All: Métodos booleanos que retornam true ou false.
-Substantivos HTTP (Ok, NotFound, BadRequest, Conflict): Métodos que geram respostas com seus respectivos status códigos HTTP (200, 404, 400, 409).
-
-Pilar 3: O Padrão de Repetição por Projetos (Projetos de Fim de Semana)
-Quando você terminar este projeto de liquidação de ativos, perceberá que a estrutura do próximo projeto (ex: um sistema de risco de crédito, ou um gateway de pagamentos) usará exatamente as mesmas peças:
-Entidade no Core com validações no construtor.
-DbContext mapeando tabelas.
-DTOs definindo os contratos de entrada e saída.
-Controllers injetando o DbContext, usando LINQ (AnyAsync, FirstOrDefaultAsync) para consultar/salvar e retornando IActionResult.
-Ninguém memoriza a documentação inteira. Desenvolvedores sêniores consultam referências o tempo todo; a diferença é que eles sabem o que procurar porque dominam o papel arquitetural de cada peça.
-
-
-Com certeza estudar o Entity Framework Core.
-
-
-
-
-Resumo dos Pontos-Chave para a Recapitulação (e para o Readme)
-Camada de Aplicação (AssetLiquidation.Api):
-Controllers: Tratam requisições HTTP RESTful, aplicam DTOs e injetam o DbContext.
-Swagger / OpenAPI: Interface interativa para consumo dos endpoints.
-
-Camada Core / Domínio (AssetLiquidation.Core):
-Entidade Asset: Contém validações de domínio (ex: Regex de 11 dígitos para o AssetId preservando zeros à esquerda).
-LiquidateDbContext: Mapeamento Objeto-Relacional via EF Core.
-Migrations: Versionamento Code-First da estrutura do banco.
-
-Infraestrutura Isolada (Docker & PostgreSQL):
-docker-compose.yml: Sobe o PostgreSQL 16 Alpine na porta 5432.
-Mapeamento de Portas (5432:5432): O Docker escuta na porta 5432 do Mac e redireciona para a 5432 interna do contêiner.
-Volume Persistente (postgres_data): Garante que os dados gravados continuem salvos no disco do Mac mesmo desligando o contêiner.
+## Resources
+* **Framework & Core:** [.NET 8 Web API & C# 12 Standards](https://learn.microsoft.com/dotnet/)
+* **ORM & Database:** [Entity Framework Core (Code-First)](https://learn.microsoft.com/ef/core/) with [Npgsql PostgreSQL Driver](https://www.npgsql.org/efcore/)
+* **Containerization:** [PostgreSQL 16 Alpine Docker Image](https://hub.docker.com/_/postgres)
+* **Architecture References:** [Domain-Driven Design (Eric Evans)](https://www.oreilly.com/library/view/domain-driven-design-tackling/0321125215/) & [Clean Architecture (Robert C. Martin)](https://www.informit.com/store/clean-architecture-a-craftsmans-guide-to-software-9780134494166)
