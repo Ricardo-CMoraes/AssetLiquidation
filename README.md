@@ -100,12 +100,15 @@ The **Asset Liquidation System** is a backend application designed to simulate f
 
 
 ## Next Steps
+* Configurar GitHub Actions (.github/workflows/ci.yml)
+* Add unit and integration test coverage (xUnit / FluentAssertions).
 * Implement RabbitMQ for asynchronous event ingestion and scalability.
 * Create a Dashboard to report real-time status and metrics of Assets.
-* Add unit and integration test coverage (xUnit / FluentAssertions).
+* Configurar a publicação automática da API e da infraestrutura (PostgreSQL/RabbitMQ) em ambiente Cloud (Azure Container Apps / AWS ECS).
 
 ## Resources
 * **Framework & Core:** [.NET 8 Web API & C# 12 Standards](https://learn.microsoft.com/dotnet/)
 * **ORM & Database:** [Entity Framework Core (Code-First)](https://learn.microsoft.com/ef/core/) with [Npgsql PostgreSQL Driver](https://www.npgsql.org/efcore/)
 * **Containerization:** [PostgreSQL 16 Alpine Docker Image](https://hub.docker.com/_/postgres)
 * **Architecture References:** [Domain-Driven Design (Eric Evans)](https://www.oreilly.com/library/view/domain-driven-design-tackling/0321125215/) & [Clean Architecture (Robert C. Martin)](https://www.informit.com/store/clean-architecture-a-craftsmans-guide-to-software-9780134494166)
+* [Tests](https://learn.microsoft.com/en-us/dotnet/core/testing/?source=docs)
